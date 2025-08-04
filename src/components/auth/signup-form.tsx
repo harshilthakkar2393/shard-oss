@@ -21,10 +21,9 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { signUp } from "@/lib/auth-client";
-import { userUpdateOne } from "@/data-access/user";
 import { useRouter } from "next/navigation";
-
+import { authClient } from "@/lib/auth-client";
+import { userUpdateOne } from "@/data-access/user";
 const formSchema = z
   .object({
     firstName: z.string().min(1, "First name is required"),
@@ -42,7 +41,7 @@ export function SignUpForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
-  const router=useRouter()
+  const router = useRouter();
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -61,18 +60,18 @@ export function SignUpForm({
     setError(null);
     setLoading(true);
     try {
-      const { data, error } = await signUp.email({
-        email: values.email, // user email address
-        password: values.password, // user password -> min 8 characters by default
-        name: values.firstName + " " + values.lastName, // user display name
+      const { data, error } = await authClient.signUp.email({
+        email: values.email,
+        password: values.password,
+        name: values.firstName + " " + values.lastName,
       });
       if (error) {
         throw error;
       }
-      if (data) {
-        await userUpdateOne(data.user.id, { isAdmin: true });
+      if (data && data.user) {
+        await userUpdateOne(data.user.id, { role: "admin" });
+        router.push("/");
       }
-      router.push("/");
     } catch (err: any) {
       setError(err.message || "Something went wrong.");
     } finally {

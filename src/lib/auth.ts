@@ -1,6 +1,7 @@
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
-import { db } from "@/drizzle/db"; // your drizzle instance
+import { db } from "@/drizzle/db";
+import { admin } from "better-auth/plugins";
 
 export const auth = betterAuth({
   database: drizzleAdapter(db, {
@@ -14,4 +15,6 @@ export const auth = betterAuth({
       generateId: false,
     },
   },
+
+  plugins: [admin({ adminRoles: ["admin"] })],
 });

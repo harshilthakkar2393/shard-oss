@@ -31,10 +31,12 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} max-w-7xl mx-auto font-sans antialiased border min-h-screen dark`}
+        className={`${geistSans.variable} ${geistMono.variable} font-sans antialiased `}
       >
         <SiteNavbar user={session?.user} />
-        <main className="w-full mx-auto">{children}</main>
+        <main className="w-full mx-auto max-w-7xl min-h-screen border-x">
+          {children}
+        </main>
       </body>
     </html>
   );
