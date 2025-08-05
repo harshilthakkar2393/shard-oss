@@ -21,7 +21,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { signIn } from "@/lib/auth-client";
+import { authClient } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 
@@ -50,7 +50,7 @@ export function LoginForm({
     setError(null);
     setLoading(true);
     try {
-      const { error } = await signIn.email(values);
+      const { error } = await authClient.signIn.email(values);
       if (error) {
         throw error;
       }
